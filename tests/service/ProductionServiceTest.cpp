@@ -30,6 +30,7 @@ using ::testing::AtLeast;
 class MockProductionRepositoryForProd : public IProductionRepository {
 public:
     MOCK_METHOD(void, Save, (const ProductionJob&), (override));
+    MOCK_METHOD(void, DeleteById, (const std::string&), (override));
     MOCK_METHOD(std::optional<ProductionJob>, FindById, (const std::string&), (const, override));
     MOCK_METHOD(std::vector<ProductionJob>, FindAll, (), (const, override));
     MOCK_METHOD(std::vector<ProductionJob>, FindByOrderId, (const std::string&), (const, override));
@@ -87,6 +88,7 @@ protected:
 
     void SetUp() override {
         ON_CALL(mockTime, Now()).WillByDefault(Return(BaseTime()));
+        ON_CALL(mockProductionRepo, DeleteById(_)).WillByDefault(Return());
 
         sut = std::make_unique<ProductionService>(
             mockProductionRepo,
@@ -242,7 +244,7 @@ TEST_F(ProductionServiceFixture, OnComplete_ShouldAddStockToInventory) {
     EXPECT_EQ(savedInv.currentStock, 18);
 }
 
-// 완료 처리 후 해당 job 에 대해 productionRepo.Save 가 최소 1회 호출
+// 완료 처리 후 해당 job 이 prodRepo 에서 삭제됨 (DeleteById 1회 호출)
 TEST_F(ProductionServiceFixture, OnComplete_ShouldDequeueJob) {
     ProductionJob job = MakeJob("P-001", "ORD-001", "S-001",
                                 10, 13, 30.0,
@@ -258,8 +260,7 @@ TEST_F(ProductionServiceFixture, OnComplete_ShouldDequeueJob) {
 
     EXPECT_CALL(mockOrderRepo, Save(_)).Times(1);
     EXPECT_CALL(mockInventoryRepo, Save(_)).Times(AnyNumber());
-    // job 완료 처리 후 productionRepo.Save 로 상태 갱신 최소 1회
-    EXPECT_CALL(mockProductionRepo, Save(_)).Times(AtLeast(1));
+    EXPECT_CALL(mockProductionRepo, DeleteById("P-001")).Times(1);
 
     sut->CheckAndCompleteProduction();
 }
@@ -417,7 +418,7 @@ TEST_F(ProductionServiceFixture, CheckCompletion_OneSecondBeforeFinish_ShouldNot
     sut->CheckAndCompleteProduction();
 }
 
-// 이미 CONFIRMED 상태인 주문에 대해 완료 처리 시 예외 또는 Save 미호출
+// 이미 CONFIRMED 상태인 주문 → orderRepo.Save 없이 job 만 삭제
 TEST_F(ProductionServiceFixture, CheckCompletion_AlreadyConfirmed_ShouldNotSaveAgain) {
     ProductionJob job = MakeJob("P-001", "ORD-001", "S-001",
                                 10, 13, 30.0,
@@ -435,8 +436,8 @@ TEST_F(ProductionServiceFixture, CheckCompletion_AlreadyConfirmed_ShouldNotSaveA
         .WillByDefault(Return(std::optional<Order>{confirmedOrder}));
     GivenInventory("S-001", 0, 0);
 
-    // CONFIRMED 상태이면 orderRepo.Save(CONFIRMED 재저장) 없어야 함
     EXPECT_CALL(mockOrderRepo, Save(_)).Times(0);
+    EXPECT_CALL(mockProductionRepo, DeleteById("P-001")).Times(1);
 
     EXPECT_NO_THROW(sut->CheckAndCompleteProduction());
 }

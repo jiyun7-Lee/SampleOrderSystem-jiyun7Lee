@@ -56,6 +56,7 @@ public:
 class MockProductionRepository : public IProductionRepository {
 public:
     MOCK_METHOD(void, Save, (const ProductionJob&), (override));
+    MOCK_METHOD(void, DeleteById, (const std::string&), (override));
     MOCK_METHOD(std::optional<ProductionJob>, FindById, (const std::string&), (const, override));
     MOCK_METHOD(std::vector<ProductionJob>, FindAll, (), (const, override));
     MOCK_METHOD(std::vector<ProductionJob>, FindByOrderId, (const std::string&), (const, override));

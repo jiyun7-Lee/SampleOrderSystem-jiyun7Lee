@@ -1,6 +1,7 @@
 #include "ProductionService.h"
 #include "../model/domain/OrderStatus.h"
 #include "../model/domain/Inventory.h"
+#include <algorithm>
 #include <cmath>
 #include <stdexcept>
 
@@ -17,7 +18,6 @@ ProductionService::ProductionService(
 }
 
 void ProductionService::EnqueueJob(const ProductionJob& job) {
-    queue_.Enqueue(job);
     prodRepo_.Save(job);
 }
 
@@ -38,11 +38,13 @@ void ProductionService::CheckAndCompleteProduction() {
 void ProductionService::CompleteCurrentJob(const ProductionJob& job) {
     auto orderOpt = orderRepo_.FindById(job.orderId);
     if (!orderOpt) {
+        prodRepo_.DeleteById(job.productionId);
         return;
     }
 
     auto& order = *orderOpt;
     if (order.status == OrderStatus::CONFIRMED) {
+        prodRepo_.DeleteById(job.productionId);
         return;
     }
 
@@ -55,11 +57,7 @@ void ProductionService::CompleteCurrentJob(const ProductionJob& job) {
     order.status = OrderStatus::CONFIRMED;
     orderRepo_.Save(order);
 
-    ProductionJob completedJob = job;
-    completedJob.startTime = timeProvider_.Now();
-    prodRepo_.Save(completedJob);
-
-    queue_.Dequeue();
+    prodRepo_.DeleteById(job.productionId);
 }
 
 std::optional<ProductionJob> ProductionService::GetCurrentJob() const {
@@ -68,6 +66,23 @@ std::optional<ProductionJob> ProductionService::GetCurrentJob() const {
         return std::nullopt;
     }
     return jobs.front();
+}
+
+std::optional<ProductionProgress> ProductionService::GetCurrentJobProgress() const {
+    auto jobOpt = GetCurrentJob();
+    if (!jobOpt) return std::nullopt;
+
+    const auto& job = *jobOpt;
+    auto now = timeProvider_.Now();
+
+    double totalSec   = std::chrono::duration<double>(job.expectedFinishTime - job.startTime).count();
+    double elapsedSec = std::chrono::duration<double>(now - job.startTime).count();
+
+    double pct = (totalSec > 0.0)
+        ? std::clamp(elapsedSec / totalSec * 100.0, 0.0, 100.0)
+        : 100.0;
+
+    return ProductionProgress{job, pct};
 }
 
 std::vector<ProductionJob> ProductionService::GetWaitingJobs() const {

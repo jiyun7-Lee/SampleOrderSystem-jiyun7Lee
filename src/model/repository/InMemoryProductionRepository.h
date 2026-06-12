@@ -9,6 +9,10 @@ public:
         store_[job.productionId] = job;
     }
 
+    void DeleteById(const std::string& id) override {
+        store_.erase(id);
+    }
+
     std::optional<ProductionJob> FindById(const std::string& id) const override {
         auto it = store_.find(id);
         if (it == store_.end()) {

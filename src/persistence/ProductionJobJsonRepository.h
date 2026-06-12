@@ -20,6 +20,11 @@ public:
         Persist();
     }
 
+    void DeleteById(const std::string& id) override {
+        store_.erase(id);
+        Persist();
+    }
+
     std::optional<ProductionJob> FindById(const std::string& id) const override {
         auto it = store_.find(id);
         if (it == store_.end()) return std::nullopt;
