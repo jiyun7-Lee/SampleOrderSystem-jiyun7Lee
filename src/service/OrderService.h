@@ -9,6 +9,16 @@
 #include "../util/ITimeProvider.h"
 #include "InventoryService.h"
 
+struct ApprovalPreview {
+    bool   sufficientStock;
+    int    availableStock;
+    int    requiredQty;
+    int    shortage;
+    int    actualProductionQty;
+    double totalProductionTime;
+    double avgProductionTime;
+};
+
 class OrderService {
 public:
     OrderService(
@@ -22,6 +32,7 @@ public:
     void ApproveOrder(const std::string& orderId);
     void RejectOrder(const std::string& orderId);
     std::vector<Order> GetReservedOrders();
+    ApprovalPreview PreviewApproval(const std::string& orderId) const;
 
 private:
     IOrderRepository&    orderRepo_;

@@ -8,6 +8,8 @@ public:
     void ShowOrderMenu() const;
     void ShowApprovalMenu() const;
     void ShowOrderList(const std::vector<Order>& orders) const;
+    void ShowShortageInfo(int shortage, int actualProductionQty,
+                          double totalProductionTime, double avgProductionTime) const;
     void ShowMessage(const std::string& msg) const;
     std::string InputString(const std::string& prompt) const;
     int InputInt(const std::string& prompt) const;

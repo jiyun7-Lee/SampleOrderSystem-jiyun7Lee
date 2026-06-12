@@ -41,8 +41,22 @@ void OrderController::ProcessApproval() {
 
     try {
         if (choice == 1) {
+            auto preview = _service->PreviewApproval(orderId);
+            if (!preview.sufficientStock) {
+                _view->ShowShortageInfo(preview.shortage,
+                                        preview.actualProductionQty,
+                                        preview.totalProductionTime,
+                                        preview.avgProductionTime);
+                int confirm = _view->InputInt("생산 후 승인하시겠습니까? [1] 예  [2] 아니오  선택: ");
+                if (confirm != 1) {
+                    _view->ShowMessage("승인이 취소되었습니다.");
+                    return;
+                }
+            }
             _service->ApproveOrder(orderId);
-            _view->ShowMessage("주문이 승인되었습니다.");
+            _view->ShowMessage(preview.sufficientStock
+                ? "주문이 승인되었습니다. (출고 대기)"
+                : "생산 대기열에 등록되었습니다. (생산 중)");
         } else if (choice == 2) {
             _service->RejectOrder(orderId);
             _view->ShowMessage("주문이 거절되었습니다.");

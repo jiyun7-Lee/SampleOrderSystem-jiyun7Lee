@@ -6,9 +6,7 @@ InventoryService::InventoryService(IInventoryRepository& repo)
 
 int InventoryService::GetAvailableStock(const std::string& sampleId) {
     auto inv = repo_.FindBySampleId(sampleId);
-    if (!inv.has_value()) {
-        throw std::runtime_error("Inventory not found for sampleId: " + sampleId);
-    }
+    if (!inv.has_value()) return 0;   // 재고 레코드 없음 = 재고 0
     return inv->availableStock();
 }
 

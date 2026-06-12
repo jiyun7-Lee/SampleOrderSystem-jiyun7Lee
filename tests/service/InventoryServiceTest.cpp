@@ -218,13 +218,15 @@ TEST_F(InventoryServiceFixture, GetInventory_NonExistingSampleId_ShouldThrow) {
     EXPECT_THROW(sut->GetInventory("X-999"), std::runtime_error);
 }
 
-// 존재하지 않는 sampleId 로 GetAvailableStock 호출 시 예외
-TEST_F(InventoryServiceFixture, GetAvailableStock_NonExistingSampleId_ShouldThrow) {
+// 존재하지 않는 sampleId 로 GetAvailableStock 호출 시 0 반환 (재고 레코드 없음 = 재고 0)
+// [변경 사유] 시료 등록 시 Inventory 레코드가 없어도 주문 승인 흐름이 동작해야 하므로
+//            throw 대신 0을 반환하도록 정책 변경 (재고 부족 → PRODUCING 경로로 분기)
+TEST_F(InventoryServiceFixture, GetAvailableStock_NonExistingSampleId_ShouldReturnZero) {
     GivenInventoryNotExists("X-999");
 
     EXPECT_CALL(mockRepo, FindBySampleId("X-999")).Times(1);
 
-    EXPECT_THROW(sut->GetAvailableStock("X-999"), std::runtime_error);
+    EXPECT_EQ(sut->GetAvailableStock("X-999"), 0);
 }
 
 // DeductStock qty > currentStock 이면 예외 (재고 음수 방지)

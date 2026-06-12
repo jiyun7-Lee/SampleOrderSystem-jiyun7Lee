@@ -55,6 +55,16 @@ void OrderView::ShowOrderList(const std::vector<Order>& orders) const {
     }
 }
 
+void OrderView::ShowShortageInfo(int shortage, int actualProductionQty,
+                                  double totalProductionTime,
+                                  double avgProductionTime) const {
+    std::cout << "\n[재고 부족]\n"
+              << "  부족량      : " << shortage           << " ea\n"
+              << "  실 생산량   : " << actualProductionQty << " ea\n"
+              << "  평균 생산시간: " << avgProductionTime  << " 분/ea\n"
+              << "  총 생산시간 : " << totalProductionTime << " 분\n";
+}
+
 void OrderView::ShowMessage(const std::string& msg) const {
     std::cout << msg << std::endl;
 }

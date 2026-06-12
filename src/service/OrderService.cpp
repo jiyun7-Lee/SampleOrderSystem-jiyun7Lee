@@ -148,3 +148,30 @@ std::vector<Order> OrderService::GetReservedOrders()
 {
     return orderRepo_.FindByStatus(OrderStatus::RESERVED);
 }
+
+ApprovalPreview OrderService::PreviewApproval(const std::string& orderId) const
+{
+    auto opt = orderRepo_.FindById(orderId);
+    if (!opt.has_value()) throw std::runtime_error("Order not found: " + orderId);
+
+    const Order& order = opt.value();
+    int avail    = inventoryService_.GetAvailableStock(order.sampleId);
+    int shortage = std::max(0, order.quantity - avail);
+
+    ApprovalPreview preview{};
+    preview.availableStock  = avail;
+    preview.requiredQty     = order.quantity;
+    preview.shortage        = shortage;
+    preview.sufficientStock = (shortage == 0);
+
+    if (!preview.sufficientStock) {
+        auto sampleOpt = sampleRepo_.FindById(order.sampleId);
+        if (!sampleOpt.has_value()) throw std::runtime_error("Sample not found: " + order.sampleId);
+        const Sample& sample = sampleOpt.value();
+        preview.avgProductionTime    = sample.averageProductionTime;
+        preview.actualProductionQty  = static_cast<int>(
+            std::ceil(static_cast<double>(shortage) / (sample.yieldRate * 0.9)));
+        preview.totalProductionTime  = sample.averageProductionTime * preview.actualProductionQty;
+    }
+    return preview;
+}
