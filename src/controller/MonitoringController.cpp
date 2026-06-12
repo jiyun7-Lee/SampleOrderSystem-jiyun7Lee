@@ -13,6 +13,8 @@ void MonitoringController::HandleMonitoring() {
             case 1: {
                 auto summary = _service->GetOrderSummary();
                 _view->ShowOrderSummary(summary);
+                auto orders = _service->GetAllOrders();
+                _view->ShowOrderList(orders);
                 break;
             }
             case 2: {

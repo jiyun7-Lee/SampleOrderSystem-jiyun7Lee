@@ -1,4 +1,5 @@
 #include "MonitoringService.h"
+#include <algorithm>
 
 MonitoringService::MonitoringService(IOrderRepository& orderRepo,
                                      IInventoryRepository& inventoryRepo,
@@ -7,6 +8,15 @@ MonitoringService::MonitoringService(IOrderRepository& orderRepo,
     , inventoryRepo_(inventoryRepo)
     , sampleRepo_(sampleRepo)
 {
+}
+
+std::vector<Order> MonitoringService::GetAllOrders() const {
+    auto orders = orderRepo_.FindAll();
+    std::sort(orders.begin(), orders.end(),
+              [](const Order& a, const Order& b) {
+                  return a.createdAt < b.createdAt;
+              });
+    return orders;
 }
 
 OrderStatusSummary MonitoringService::GetOrderSummary() const {

@@ -27,6 +27,7 @@ public:
                       IInventoryRepository& inventoryRepo,
                       ISampleRepository& sampleRepo);
     OrderStatusSummary GetOrderSummary() const;
+    std::vector<Order> GetAllOrders() const;
     std::vector<InventoryStatus> GetInventoryStatus() const;
 private:
     IOrderRepository& orderRepo_;
