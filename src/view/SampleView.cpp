@@ -33,7 +33,6 @@ void SampleView::ShowMessage(const std::string& msg) const {
 std::string SampleView::InputString(const std::string& prompt) const {
     std::cout << prompt;
     std::string value;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, value);
     return value;
 }
@@ -41,7 +40,12 @@ std::string SampleView::InputString(const std::string& prompt) const {
 double SampleView::InputDouble(const std::string& prompt) const {
     std::cout << prompt;
     double value = 0.0;
-    std::cin >> value;
+    while (!(std::cin >> value)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "숫자를 입력하세요: ";
+    }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return value;
 }
 
@@ -51,8 +55,7 @@ int SampleView::InputInt(const std::string& prompt) const {
     std::cin >> value;
     if (std::cin.fail()) {
         std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return -1;
     }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return value;
 }
