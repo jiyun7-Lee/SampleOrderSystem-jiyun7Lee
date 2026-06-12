@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <ctime>
+#include <algorithm>
 
 OrderService::OrderService(
     IOrderRepository& orderRepo,
@@ -20,6 +21,17 @@ OrderService::OrderService(
     , timeProvider_(timeProvider)
     , orderCounter_(0)
 {
+    // 재시작 후 기존 주문 중 최대 일련번호로 카운터 초기화 (중복 방지)
+    for (const auto& order : orderRepo_.FindAll()) {
+        // orderId 형식: ORD-YYYYMMDD-NNNN
+        auto pos = order.orderId.rfind('-');
+        if (pos != std::string::npos) {
+            try {
+                int n = std::stoi(order.orderId.substr(pos + 1));
+                if (n > orderCounter_) orderCounter_ = n;
+            } catch (...) {}
+        }
+    }
 }
 
 void OrderService::PlaceOrder(const std::string& sampleId,
@@ -29,7 +41,10 @@ void OrderService::PlaceOrder(const std::string& sampleId,
     if (sampleId.empty()) {
         throw std::invalid_argument("sampleId must not be empty");
     }
-    if (customerName.empty()) {
+    auto isBlank = [](const std::string& s) {
+        return std::all_of(s.begin(), s.end(), [](unsigned char c){ return std::isspace(c); });
+    };
+    if (customerName.empty() || isBlank(customerName)) {
         throw std::invalid_argument("customerName must not be empty");
     }
     if (quantity <= 0) {
