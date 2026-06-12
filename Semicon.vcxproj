@@ -151,6 +151,7 @@
     <ClInclude Include="src\model\domain\Order.h" />
     <ClInclude Include="src\model\domain\Inventory.h" />
     <ClInclude Include="src\model\domain\ProductionJob.h" />
+    <ClInclude Include="src\model\domain\ProductionQueue.h" />
     <ClInclude Include="src\model\repository\ISampleRepository.h" />
     <ClInclude Include="src\model\repository\IOrderRepository.h" />
     <ClInclude Include="src\model\repository\IInventoryRepository.h" />
@@ -164,10 +165,13 @@
     <ClInclude Include="src\service\SampleService.h" />
     <ClInclude Include="src\service\InventoryService.h" />
     <ClInclude Include="src\service\OrderService.h" />
+    <ClInclude Include="src\service\ProductionService.h" />
     <ClInclude Include="src\controller\SampleController.h" />
     <ClInclude Include="src\controller\OrderController.h" />
     <ClInclude Include="src\view\SampleView.h" />
     <ClInclude Include="src\view\OrderView.h" />
+    <ClInclude Include="src\view\ProductionView.h" />
+    <ClInclude Include="src\controller\ProductionController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -178,6 +182,9 @@
     <ClCompile Include="src\service\SampleService.cpp" />
     <ClCompile Include="src\service\InventoryService.cpp" />
     <ClCompile Include="src\service\OrderService.cpp" />
+    <ClCompile Include="src\service\ProductionService.cpp" />
+    <ClCompile Include="src\view\ProductionView.cpp" />
+    <ClCompile Include="src\controller\ProductionController.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile Include="tests\domain\DomainModelTest.cpp" />
