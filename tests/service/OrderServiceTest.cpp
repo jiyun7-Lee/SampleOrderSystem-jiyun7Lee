@@ -345,6 +345,27 @@ TEST_F(OrderServiceFixture, ApproveOrder_ExactlyMatchStock_ShouldConfirm) {
     EXPECT_EQ(saved.status, OrderStatus::CONFIRMED);
 }
 
+// 기존 주문이 reservedStock 으로 재고를 확보한 상태에서
+// 신규 주문은 availableStock(= currentStock - reservedStock) 기준으로만 승인 판단
+// currentStock=10, reservedStock=8 → availableStock=2 < qty=5 → PRODUCING
+TEST_F(OrderServiceFixture, ApproveOrder_ReservedByOtherOrder_ShouldUseAvailableOnly) {
+    GivenOrderExists("ORD-002", "S-001", 5, OrderStatus::RESERVED);
+    GivenInventory("S-001", 10, 8);  // availableStock=2, 나머지 8은 기존 주문 확보분
+    GivenSampleExists("S-001");
+
+    Order saved;
+    EXPECT_CALL(mockOrderRepo, Save(_))
+        .Times(1)
+        .WillOnce(SaveArg<0>(&saved));
+    EXPECT_CALL(mockProductionRepo, Save(_)).Times(1);
+
+    sut->ApproveOrder("ORD-002");
+
+    // currentStock(10) 으로 보면 충분해 보이지만
+    // availableStock(2) < qty(5) 이므로 반드시 PRODUCING 이어야 함
+    EXPECT_EQ(saved.status, OrderStatus::PRODUCING);
+}
+
 // availableStock == quantity - 1 (경계값: 1개 부족) 이면 PRODUCING 전환
 TEST_F(OrderServiceFixture, ApproveOrder_OneShortOfStock_ShouldProducing) {
     GivenOrderExists("ORD-001", "S-001", 10, OrderStatus::RESERVED);
