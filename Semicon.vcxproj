@@ -161,9 +161,15 @@
     <ClInclude Include="src\model\repository\InMemoryProductionRepository.h" />
     <ClInclude Include="src\util\ITimeProvider.h" />
     <ClInclude Include="src\util\SystemTimeProvider.h" />
+    <ClInclude Include="src\service\SampleService.h" />
+    <ClInclude Include="src\controller\SampleController.h" />
+    <ClInclude Include="src\view\SampleView.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\controller\SampleController.cpp" />
+    <ClCompile Include="src\view\SampleView.cpp" />
+    <ClCompile Include="src\service\SampleService.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

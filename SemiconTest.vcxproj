@@ -76,9 +76,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\service\SampleService.h" />
+    <ClInclude Include="src\controller\SampleController.h" />
+    <ClInclude Include="src\view\SampleView.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\service\SampleService.cpp" />
+    <ClCompile Include="src\controller\SampleController.cpp" />
+    <ClCompile Include="src\view\SampleView.cpp" />
     <ClCompile Include="tests\domain\DomainModelTest.cpp" />
     <ClCompile Include="tests\domain\TimeProviderTest.cpp" />
     <ClCompile Include="tests\service\SampleServiceTest.cpp" />
+    <ClCompile Include="..\packages\gmock.1.11.0\lib\native\src\gtest\src\gtest_main.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
