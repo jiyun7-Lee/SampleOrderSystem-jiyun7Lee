@@ -41,7 +41,8 @@ public:
         return store_.find(id) != store_.end();
     }
 
-    void DeleteById(const std::string& id) override {
+    // 인터페이스 계약 외 유틸리티 메서드 — 테스트 및 관리 목적으로만 사용
+    void DeleteById(const std::string& id) {
         store_.erase(id);
     }
 

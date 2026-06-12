@@ -17,6 +17,15 @@ public:
         return it->second;
     }
 
+    std::vector<ProductionJob> FindAll() const override {
+        std::vector<ProductionJob> result;
+        result.reserve(store_.size());
+        for (const auto& pair : store_) {
+            result.push_back(pair.second);
+        }
+        return result;
+    }
+
     std::vector<ProductionJob> FindByOrderId(const std::string& orderId) const override {
         std::vector<ProductionJob> result;
         for (const auto& pair : store_) {
