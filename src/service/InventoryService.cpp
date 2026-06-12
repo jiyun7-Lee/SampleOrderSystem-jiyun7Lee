@@ -54,6 +54,21 @@ void InventoryService::DeductStock(const std::string& sampleId, int qty) {
     repo_.Save(*inv);
 }
 
+void InventoryService::DeallocateStock(const std::string& sampleId, int qty) {
+    if (qty <= 0) {
+        throw std::invalid_argument("qty must be greater than 0");
+    }
+    auto inv = repo_.FindBySampleId(sampleId);
+    if (!inv.has_value()) {
+        throw std::runtime_error("Inventory not found for sampleId: " + sampleId);
+    }
+    inv->reservedStock -= qty;
+    if (inv->reservedStock < 0) {
+        inv->reservedStock = 0;
+    }
+    repo_.Save(*inv);
+}
+
 Inventory InventoryService::GetInventory(const std::string& sampleId) {
     auto inv = repo_.FindBySampleId(sampleId);
     if (!inv.has_value()) {

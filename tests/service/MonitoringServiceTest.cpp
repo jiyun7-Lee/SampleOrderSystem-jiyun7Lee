@@ -50,7 +50,7 @@ public:
 // -----------------------------------------------------------------------
 class MonitoringServiceFixture : public ::testing::Test {
 protected:
-    MockOrderRepositoryForMonitoring      mockOrderRepo;
+    MockOrderRepositoryForMonitoring mockOrderRepo;
     MockInventoryRepositoryForMonitoring  mockInventoryRepo;
     MockSampleRepositoryForMonitoring     mockSampleRepo;
 
@@ -63,8 +63,9 @@ protected:
 
     // 헬퍼: 특정 상태에 해당하는 Order 목록을 반환하도록 설정
     void GivenOrdersByStatus(OrderStatus status, std::vector<Order> orders) {
-        ON_CALL(mockOrderRepo, FindByStatus(status))
-            .WillByDefault(Return(orders));
+        EXPECT_CALL(mockOrderRepo, FindByStatus(status))
+            .Times(::testing::AnyNumber())
+            .WillRepeatedly(Return(orders));
     }
 
     // 헬퍼: Order 빌더

@@ -166,12 +166,18 @@
     <ClInclude Include="src\service\InventoryService.h" />
     <ClInclude Include="src\service\OrderService.h" />
     <ClInclude Include="src\service\ProductionService.h" />
+    <ClInclude Include="src\service\ReleaseService.h" />
     <ClInclude Include="src\controller\SampleController.h" />
     <ClInclude Include="src\controller\OrderController.h" />
     <ClInclude Include="src\view\SampleView.h" />
     <ClInclude Include="src\view\OrderView.h" />
     <ClInclude Include="src\view\ProductionView.h" />
     <ClInclude Include="src\controller\ProductionController.h" />
+    <ClInclude Include="src\service\MonitoringService.h" />
+    <ClInclude Include="src\view\ReleaseView.h" />
+    <ClInclude Include="src\controller\ReleaseController.h" />
+    <ClInclude Include="src\view\MonitoringView.h" />
+    <ClInclude Include="src\controller\MonitoringController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -183,8 +189,14 @@
     <ClCompile Include="src\service\InventoryService.cpp" />
     <ClCompile Include="src\service\OrderService.cpp" />
     <ClCompile Include="src\service\ProductionService.cpp" />
+    <ClCompile Include="src\service\ReleaseService.cpp" />
+    <ClCompile Include="src\service\MonitoringService.cpp" />
     <ClCompile Include="src\view\ProductionView.cpp" />
     <ClCompile Include="src\controller\ProductionController.cpp" />
+    <ClCompile Include="src\view\ReleaseView.cpp" />
+    <ClCompile Include="src\controller\ReleaseController.cpp" />
+    <ClCompile Include="src\view\MonitoringView.cpp" />
+    <ClCompile Include="src\controller\MonitoringController.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile Include="tests\domain\DomainModelTest.cpp" />

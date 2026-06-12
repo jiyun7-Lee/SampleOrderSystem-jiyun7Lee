@@ -12,6 +12,7 @@ public:
     void AllocateStock(const std::string& sampleId, int qty);
     void AddStock(const std::string& sampleId, int qty);
     void DeductStock(const std::string& sampleId, int qty);
+    void DeallocateStock(const std::string& sampleId, int qty);
     Inventory GetInventory(const std::string& sampleId);
 
 private:
