@@ -26,20 +26,20 @@
 
 ## Phase별 체크리스트
 
-### Phase 1 — 프로젝트 기반 구조 및 도메인 모델 → [상세](Phase1_기반구조_도메인모델.md)
-- [ ] Step 1-1: 디렉토리 구조 및 CMakeLists.txt 구성
-- [ ] Step 1-2: 주문 상태 `enum class OrderStatus` 정의
-- [ ] Step 1-3: 도메인 모델 클래스 구현 (Sample, Order, Inventory, ProductionJob)
-- [ ] Step 1-4: Repository 인터페이스 정의 (ISampleRepository, IOrderRepository, IInventoryRepository, IProductionRepository)
-- [ ] Step 1-5: ITimeProvider 인터페이스 및 SystemTimeProvider 구현
-- [ ] Step 1-6: InMemory Repository 구현체 (테스트용)
-- [ ] Step 1-7: Main 진입점 및 콘솔 한글 인코딩 설정
+### Phase 1 — 프로젝트 기반 구조 및 도메인 모델 ✅ → [상세](Phase1_기반구조_도메인모델.md)
+- [x] Step 1-1: 디렉토리 구조 및 CMakeLists.txt 구성
+- [x] Step 1-2: 주문 상태 `enum class OrderStatus` 정의
+- [x] Step 1-3: 도메인 모델 클래스 구현 (Sample, Order, Inventory, ProductionJob)
+- [x] Step 1-4: Repository 인터페이스 정의 (ISampleRepository, IOrderRepository, IInventoryRepository, IProductionRepository)
+- [x] Step 1-5: ITimeProvider 인터페이스 및 SystemTimeProvider 구현
+- [x] Step 1-6: InMemory Repository 구현체 (테스트용)
+- [x] Step 1-7: Main 진입점 및 콘솔 한글 인코딩 설정
 
-### Phase 2 — 시료 관리 기능 (FR-01~03) → [상세](Phase2_시료관리.md)
-- [ ] Step 2-1: SampleService 구현 (시료 등록·조회·검색)
-- [ ] Step 2-2: SampleController 구현
-- [ ] Step 2-3: SampleView 구현 (콘솔 UI)
-- [ ] Step 2-4: 메인 메뉴 [1] 시료 관리 연결
+### Phase 2 — 시료 관리 기능 (FR-01~03) ✅ → [상세](Phase2_시료관리.md)
+- [x] Step 2-1: SampleService 구현 (시료 등록·조회·검색)
+- [x] Step 2-2: SampleController 구현
+- [x] Step 2-3: SampleView 구현 (콘솔 UI)
+- [x] Step 2-4: 메인 메뉴 [1] 시료 관리 연결
 
 ### Phase 3 — 주문 관리 기능 (FR-04~06) → [상세](Phase3_주문관리.md)
 - [ ] Step 3-1: InventoryService 구현 (availableStock 계산)

@@ -1,18 +1,118 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
+    <Filter Include="src">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="src\model">
+      <UniqueIdentifier>{1A2B3C4D-5E6F-7890-ABCD-EF0123456789}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="src\model\domain">
+      <UniqueIdentifier>{2B3C4D5E-6F7A-8901-BCDE-F01234567890}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\model\repository">
+      <UniqueIdentifier>{3C4D5E6F-7A8B-9012-CDEF-012345678901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\service">
+      <UniqueIdentifier>{4D5E6F7A-8B9C-0123-DEFA-123456789012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\controller">
+      <UniqueIdentifier>{5E6F7A8B-9C0D-1234-EFAB-234567890123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\view">
+      <UniqueIdentifier>{6F7A8B9C-0D1E-2345-FABC-345678901234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{7A8B9C0D-1E2F-3456-ABCD-456789012345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{8B9C0D1E-2F3A-4567-BCDE-567890123456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\domain">
+      <UniqueIdentifier>{9C0D1E2F-3A4B-5678-CDEF-678901234567}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\service">
+      <UniqueIdentifier>{0D1E2F3A-4B5C-6789-DEFA-789012345678}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\service\SampleService.cpp">
+      <Filter>src\service</Filter>
+    </ClCompile>
+    <ClCompile Include="src\controller\SampleController.cpp">
+      <Filter>src\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="src\view\SampleView.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\domain\DomainModelTest.cpp">
+      <Filter>tests\domain</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\domain\TimeProviderTest.cpp">
+      <Filter>tests\domain</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\service\SampleServiceTest.cpp">
+      <Filter>tests\service</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\model\domain\OrderStatus.h">
+      <Filter>src\model\domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\domain\Sample.h">
+      <Filter>src\model\domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\domain\Order.h">
+      <Filter>src\model\domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\domain\Inventory.h">
+      <Filter>src\model\domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\domain\ProductionJob.h">
+      <Filter>src\model\domain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\ISampleRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\IOrderRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\IInventoryRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\IProductionRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\InMemorySampleRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\InMemoryOrderRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\InMemoryInventoryRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\model\repository\InMemoryProductionRepository.h">
+      <Filter>src\model\repository</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\ITimeProvider.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\SystemTimeProvider.h">
+      <Filter>src\util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\service\SampleService.h">
+      <Filter>src\service</Filter>
+    </ClInclude>
+    <ClInclude Include="src\controller\SampleController.h">
+      <Filter>src\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="src\view\SampleView.h">
+      <Filter>src\view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
