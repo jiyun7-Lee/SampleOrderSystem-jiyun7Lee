@@ -2,13 +2,15 @@
 
 #include "../model/repository/IProductionRepository.h"
 #include "../third_party/nlohmann/json.hpp"
+#include "TimePointSerializer.h"
 #include <fstream>
 #include <map>
-#include <chrono>
+#include <filesystem>
+#include <stdexcept>
 
 class ProductionJobJsonRepository : public IProductionRepository {
 public:
-    explicit ProductionJobJsonRepository(const std::string& filePath)
+    explicit ProductionJobJsonRepository(const std::filesystem::path& filePath)
         : filePath_(filePath) {
         Load();
     }
@@ -40,17 +42,8 @@ public:
     }
 
 private:
-    std::string filePath_;
+    std::filesystem::path filePath_;
     std::map<std::string, ProductionJob> store_;
-
-    static int64_t ToEpoch(const std::chrono::system_clock::time_point& tp) {
-        return std::chrono::duration_cast<std::chrono::seconds>(
-            tp.time_since_epoch()).count();
-    }
-
-    static std::chrono::system_clock::time_point FromEpoch(int64_t sec) {
-        return std::chrono::system_clock::time_point(std::chrono::seconds(sec));
-    }
 
     void Load() {
         std::ifstream ifs(filePath_);
@@ -66,11 +59,13 @@ private:
                 job.requiredQuantity         = item.at("requiredQuantity").get<int>();
                 job.actualProductionQuantity = item.at("actualProductionQuantity").get<int>();
                 job.totalProductionTime      = item.at("totalProductionTime").get<double>();
-                job.startTime               = FromEpoch(item.at("startTime").get<int64_t>());
-                job.expectedFinishTime      = FromEpoch(item.at("expectedFinishTime").get<int64_t>());
+                job.startTime               = TimePointSerializer::FromEpoch(item.at("startTime").get<int64_t>());
+                job.expectedFinishTime      = TimePointSerializer::FromEpoch(item.at("expectedFinishTime").get<int64_t>());
                 store_[job.productionId] = job;
             }
-        } catch (...) {}
+        } catch (const std::exception&) {
+            store_.clear();
+        }
     }
 
     void Persist() const {
@@ -83,11 +78,12 @@ private:
                 {"requiredQuantity",         job.requiredQuantity},
                 {"actualProductionQuantity", job.actualProductionQuantity},
                 {"totalProductionTime",      job.totalProductionTime},
-                {"startTime",               ToEpoch(job.startTime)},
-                {"expectedFinishTime",      ToEpoch(job.expectedFinishTime)}
+                {"startTime",               TimePointSerializer::ToEpoch(job.startTime)},
+                {"expectedFinishTime",      TimePointSerializer::ToEpoch(job.expectedFinishTime)}
             });
         }
         std::ofstream ofs(filePath_);
+        if (!ofs) throw std::runtime_error("ProductionJobJsonRepository: failed to open file for writing: " + filePath_.string());
         ofs << j.dump(2);
     }
 };

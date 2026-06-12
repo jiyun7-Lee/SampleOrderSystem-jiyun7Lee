@@ -3,13 +3,15 @@
 #include "../model/repository/IOrderRepository.h"
 #include "../model/domain/OrderStatus.h"
 #include "../third_party/nlohmann/json.hpp"
+#include "TimePointSerializer.h"
 #include <fstream>
 #include <map>
-#include <chrono>
+#include <filesystem>
+#include <stdexcept>
 
 class OrderJsonRepository : public IOrderRepository {
 public:
-    explicit OrderJsonRepository(const std::string& filePath)
+    explicit OrderJsonRepository(const std::filesystem::path& filePath)
         : filePath_(filePath) {
         Load();
     }
@@ -45,35 +47,26 @@ public:
     }
 
 private:
-    std::string filePath_;
+    std::filesystem::path filePath_;
     std::map<std::string, Order> store_;
 
-    static std::string StatusToString(OrderStatus s) {
+    [[nodiscard]] static std::string StatusToString(OrderStatus s) {
         switch (s) {
             case OrderStatus::RESERVED:  return "RESERVED";
             case OrderStatus::PRODUCING: return "PRODUCING";
             case OrderStatus::CONFIRMED: return "CONFIRMED";
             case OrderStatus::RELEASE:   return "RELEASE";
             case OrderStatus::REJECTED:  return "REJECTED";
+            default:                     return "RESERVED";
         }
-        return "RESERVED";
     }
 
-    static OrderStatus StringToStatus(const std::string& s) {
+    [[nodiscard]] static OrderStatus StringToStatus(const std::string& s) {
         if (s == "PRODUCING") return OrderStatus::PRODUCING;
         if (s == "CONFIRMED") return OrderStatus::CONFIRMED;
         if (s == "RELEASE")   return OrderStatus::RELEASE;
         if (s == "REJECTED")  return OrderStatus::REJECTED;
         return OrderStatus::RESERVED;
-    }
-
-    static int64_t ToEpoch(const std::chrono::system_clock::time_point& tp) {
-        return std::chrono::duration_cast<std::chrono::seconds>(
-            tp.time_since_epoch()).count();
-    }
-
-    static std::chrono::system_clock::time_point FromEpoch(int64_t sec) {
-        return std::chrono::system_clock::time_point(std::chrono::seconds(sec));
     }
 
     void Load() {
@@ -89,10 +82,12 @@ private:
                 o.customerName = item.at("customerName").get<std::string>();
                 o.quantity     = item.at("quantity").get<int>();
                 o.status       = StringToStatus(item.at("status").get<std::string>());
-                o.createdAt    = FromEpoch(item.at("createdAt").get<int64_t>());
+                o.createdAt    = TimePointSerializer::FromEpoch(item.at("createdAt").get<int64_t>());
                 store_[o.orderId] = o;
             }
-        } catch (...) {}
+        } catch (const std::exception&) {
+            store_.clear();
+        }
     }
 
     void Persist() const {
@@ -104,10 +99,11 @@ private:
                 {"customerName", o.customerName},
                 {"quantity",     o.quantity},
                 {"status",       StatusToString(o.status)},
-                {"createdAt",    ToEpoch(o.createdAt)}
+                {"createdAt",    TimePointSerializer::ToEpoch(o.createdAt)}
             });
         }
         std::ofstream ofs(filePath_);
+        if (!ofs) throw std::runtime_error("OrderJsonRepository: failed to open file for writing: " + filePath_.string());
         ofs << j.dump(2);
     }
 };

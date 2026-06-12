@@ -4,10 +4,12 @@
 #include "../third_party/nlohmann/json.hpp"
 #include <fstream>
 #include <map>
+#include <filesystem>
+#include <stdexcept>
 
 class SampleJsonRepository : public ISampleRepository {
 public:
-    explicit SampleJsonRepository(const std::string& filePath)
+    explicit SampleJsonRepository(const std::filesystem::path& filePath)
         : filePath_(filePath) {
         Load();
     }
@@ -46,7 +48,7 @@ public:
     }
 
 private:
-    std::string filePath_;
+    std::filesystem::path filePath_;
     std::map<std::string, Sample> store_;
 
     void Load() {
@@ -63,7 +65,9 @@ private:
                 s.yieldRate             = item.at("yieldRate").get<double>();
                 store_[s.sampleId]      = s;
             }
-        } catch (...) {}
+        } catch (const std::exception&) {
+            store_.clear();
+        }
     }
 
     void Persist() const {
@@ -77,6 +81,7 @@ private:
             });
         }
         std::ofstream ofs(filePath_);
+        if (!ofs) throw std::runtime_error("SampleJsonRepository: failed to open file for writing: " + filePath_.string());
         ofs << j.dump(2);
     }
 };

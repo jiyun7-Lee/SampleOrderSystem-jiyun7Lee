@@ -4,10 +4,12 @@
 #include "../third_party/nlohmann/json.hpp"
 #include <fstream>
 #include <map>
+#include <filesystem>
+#include <stdexcept>
 
 class InventoryJsonRepository : public IInventoryRepository {
 public:
-    explicit InventoryJsonRepository(const std::string& filePath)
+    explicit InventoryJsonRepository(const std::filesystem::path& filePath)
         : filePath_(filePath) {
         Load();
     }
@@ -28,7 +30,7 @@ public:
     }
 
 private:
-    std::string filePath_;
+    std::filesystem::path filePath_;
     std::map<std::string, Inventory> store_;
 
     void Load() {
@@ -44,7 +46,9 @@ private:
                 inv.reservedStock = item.at("reservedStock").get<int>();
                 store_[inv.sampleId] = inv;
             }
-        } catch (...) {}
+        } catch (const std::exception&) {
+            store_.clear();
+        }
     }
 
     void Persist() const {
@@ -57,6 +61,7 @@ private:
             });
         }
         std::ofstream ofs(filePath_);
+        if (!ofs) throw std::runtime_error("InventoryJsonRepository: failed to open file for writing: " + filePath_.string());
         ofs << j.dump(2);
     }
 };

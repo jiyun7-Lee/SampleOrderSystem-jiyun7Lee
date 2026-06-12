@@ -178,6 +178,11 @@
     <ClInclude Include="src\controller\ReleaseController.h" />
     <ClInclude Include="src\view\MonitoringView.h" />
     <ClInclude Include="src\controller\MonitoringController.h" />
+    <ClInclude Include="src\persistence\TimePointSerializer.h" />
+    <ClInclude Include="src\persistence\SampleJsonRepository.h" />
+    <ClInclude Include="src\persistence\OrderJsonRepository.h" />
+    <ClInclude Include="src\persistence\InventoryJsonRepository.h" />
+    <ClInclude Include="src\persistence\ProductionJobJsonRepository.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
