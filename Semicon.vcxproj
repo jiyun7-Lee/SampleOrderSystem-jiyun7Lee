@@ -162,19 +162,30 @@
     <ClInclude Include="src\util\ITimeProvider.h" />
     <ClInclude Include="src\util\SystemTimeProvider.h" />
     <ClInclude Include="src\service\SampleService.h" />
+    <ClInclude Include="src\service\InventoryService.h" />
+    <ClInclude Include="src\service\OrderService.h" />
     <ClInclude Include="src\controller\SampleController.h" />
+    <ClInclude Include="src\controller\OrderController.h" />
     <ClInclude Include="src\view\SampleView.h" />
+    <ClInclude Include="src\view\OrderView.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\controller\SampleController.cpp" />
+    <ClCompile Include="src\controller\OrderController.cpp" />
     <ClCompile Include="src\view\SampleView.cpp" />
+    <ClCompile Include="src\view\OrderView.cpp" />
     <ClCompile Include="src\service\SampleService.cpp" />
+    <ClCompile Include="src\service\InventoryService.cpp" />
+    <ClCompile Include="src\service\OrderService.cpp" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile Include="tests\domain\DomainModelTest.cpp" />
     <ClCompile Include="tests\domain\TimeProviderTest.cpp" />
     <ClCompile Include="tests\service\SampleServiceTest.cpp" />
+    <ClCompile Include="tests\service\InventoryServiceTest.cpp" />
+    <ClCompile Include="tests\service\OrderServiceTest.cpp" />
+    <ClCompile Include="tests\repository\InMemoryRepositoryExtTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

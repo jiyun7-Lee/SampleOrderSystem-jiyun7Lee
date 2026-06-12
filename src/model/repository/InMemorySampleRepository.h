@@ -27,11 +27,13 @@ public:
         return result;
     }
 
-    std::vector<Sample> FindByName(const std::string& name) const override {
+    std::vector<Sample> FindByName(const std::string& keyword) const override {
         std::vector<Sample> result;
         for (const auto& pair : store_) {
-            if (pair.second.name == name) {
-                result.push_back(pair.second);
+            const auto& s = pair.second;
+            if (s.name.find(keyword) != std::string::npos ||
+                s.sampleId.find(keyword) != std::string::npos) {
+                result.push_back(s);
             }
         }
         return result;
