@@ -1,5 +1,6 @@
 #include "SampleView.h"
 #include <iostream>
+#include <limits>
 
 void SampleView::ShowMenu() const {
     std::cout << "\n[1] 시료 등록\n"
@@ -10,6 +11,8 @@ void SampleView::ShowMenu() const {
 }
 
 void SampleView::ShowSampleList(const std::vector<Sample>& samples) const {
+    std::cout << "ID | 시료명 | 평균생산시간(분) | 수율\n"
+              << "-------------------------------------------\n";
     for (const auto& s : samples) {
         ShowSample(s);
     }
@@ -30,7 +33,8 @@ void SampleView::ShowMessage(const std::string& msg) const {
 std::string SampleView::InputString(const std::string& prompt) const {
     std::cout << prompt;
     std::string value;
-    std::cin >> value;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, value);
     return value;
 }
 
@@ -38,5 +42,17 @@ double SampleView::InputDouble(const std::string& prompt) const {
     std::cout << prompt;
     double value = 0.0;
     std::cin >> value;
+    return value;
+}
+
+int SampleView::InputInt(const std::string& prompt) const {
+    std::cout << prompt;
+    int value = -1;
+    std::cin >> value;
+    if (std::cin.fail()) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return -1;
+    }
     return value;
 }

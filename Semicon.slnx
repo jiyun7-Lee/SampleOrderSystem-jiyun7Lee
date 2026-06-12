@@ -3,6 +3,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Semicon.vcxproj" />
-  <Project Path="SemiconTest.vcxproj" />
+  <Project Path="Semicon.vcxproj" Id="898e6873-fbb3-4c67-884f-453b58fe64c5" />
+  <Project Path="SemiconTest.vcxproj" Id="a1b2c3d4-e5f6-7890-abcd-ef1234567890" />
 </Solution>

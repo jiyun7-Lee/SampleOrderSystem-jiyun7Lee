@@ -4,16 +4,23 @@
 SampleService::SampleService(std::shared_ptr<ISampleRepository> repo)
     : _repo(std::move(repo)) {}
 
-void SampleService::RegisterSample(const Sample& sample) {
+void SampleService::ValidateSample(const Sample& sample) const {
     if (sample.sampleId.empty()) {
         throw std::invalid_argument("시료 ID는 비어있을 수 없습니다.");
+    }
+    if (sample.name.empty()) {
+        throw std::invalid_argument("시료 이름은 비어있을 수 없습니다.");
     }
     if (sample.yieldRate < 0.0 || sample.yieldRate > 1.0) {
         throw std::invalid_argument("수율은 0.0 이상 1.0 이하이어야 합니다.");
     }
-    if (sample.averageProductionTime < 0.0) {
-        throw std::invalid_argument("평균 생산시간은 0 이상이어야 합니다.");
+    if (sample.averageProductionTime <= 0.0) {
+        throw std::invalid_argument("평균 생산시간은 0 초과이어야 합니다.");
     }
+}
+
+void SampleService::RegisterSample(const Sample& sample) {
+    ValidateSample(sample);
     if (_repo->ExistsById(sample.sampleId)) {
         throw std::runtime_error("이미 존재하는 시료 ID입니다: " + sample.sampleId);
     }

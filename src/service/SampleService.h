@@ -17,4 +17,6 @@ public:
 
 private:
     std::shared_ptr<ISampleRepository> _repo;
+
+    void ValidateSample(const Sample& sample) const;
 };

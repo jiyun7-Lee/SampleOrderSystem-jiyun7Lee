@@ -1,16 +1,16 @@
 #pragma once
 #include <memory>
 #include "../service/SampleService.h"
-
-class SampleView;
+#include "../view/SampleView.h"
 
 class SampleController {
 public:
-    explicit SampleController(std::shared_ptr<SampleService> service);
+    SampleController(std::shared_ptr<SampleService> service, std::shared_ptr<SampleView> view);
     void Run();
 
 private:
     std::shared_ptr<SampleService> _service;
+    std::shared_ptr<SampleView> _view;
 
     void RegisterSample();
     void ListAllSamples();

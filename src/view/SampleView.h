@@ -11,4 +11,5 @@ public:
     void ShowMessage(const std::string& msg) const;
     std::string InputString(const std::string& prompt) const;
     double InputDouble(const std::string& prompt) const;
+    int InputInt(const std::string& prompt) const;
 };

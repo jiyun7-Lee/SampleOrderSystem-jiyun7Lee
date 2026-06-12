@@ -4,6 +4,7 @@
 #include "model/repository/InMemorySampleRepository.h"
 #include "service/SampleService.h"
 #include "controller/SampleController.h"
+#include "view/SampleView.h"
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
@@ -13,7 +14,8 @@ int main() {
 
     auto sampleRepo = std::make_shared<InMemorySampleRepository>();
     auto sampleService = std::make_shared<SampleService>(sampleRepo);
-    SampleController sampleController(sampleService);
+    auto sampleView = std::make_shared<SampleView>();
+    SampleController sampleController(sampleService, sampleView);
 
     int choice = 0;
     while (true) {
