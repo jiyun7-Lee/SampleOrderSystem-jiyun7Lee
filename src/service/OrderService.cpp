@@ -114,12 +114,19 @@ void OrderService::ApproveOrder(const std::string& orderId)
             static_cast<int>(std::ceil(static_cast<double>(shortage) / (sample.yieldRate * 0.9)));
         double totalProductionTime = sample.averageProductionTime * actualProductionQty;
 
+        auto now = timeProvider_.Now();
+        auto finishTime = now + std::chrono::seconds(
+            static_cast<long long>(totalProductionTime * 60));
+
         ProductionJob job;
+        job.productionId             = "PJ-" + order.orderId;
         job.orderId                  = order.orderId;
         job.sampleId                 = order.sampleId;
         job.requiredQuantity         = order.quantity;
         job.actualProductionQuantity = actualProductionQty;
         job.totalProductionTime      = totalProductionTime;
+        job.startTime                = now;
+        job.expectedFinishTime       = finishTime;
 
         productionRepo_.Save(job);
 

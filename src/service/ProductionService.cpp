@@ -1,5 +1,6 @@
 #include "ProductionService.h"
 #include "../model/domain/OrderStatus.h"
+#include "../model/domain/Inventory.h"
 #include <cmath>
 #include <stdexcept>
 
@@ -45,11 +46,11 @@ void ProductionService::CompleteCurrentJob(const ProductionJob& job) {
         return;
     }
 
-    if (auto invOpt = invRepo_.FindBySampleId(job.sampleId)) {
-        auto inv = *invOpt;
-        inv.currentStock += job.actualProductionQuantity;
-        invRepo_.Save(inv);
-    }
+    // 생산 완료분 재고 추가 (레코드 없으면 신규 생성)
+    auto invOpt = invRepo_.FindBySampleId(job.sampleId);
+    Inventory inv = invOpt.value_or(Inventory{job.sampleId, 0, 0});
+    inv.currentStock += job.actualProductionQuantity;
+    invRepo_.Save(inv);
 
     order.status = OrderStatus::CONFIRMED;
     orderRepo_.Save(order);
