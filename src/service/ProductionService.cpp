@@ -36,18 +36,17 @@ void ProductionService::CheckAndCompleteProduction() {
 
 void ProductionService::CompleteCurrentJob(const ProductionJob& job) {
     auto orderOpt = orderRepo_.FindById(job.orderId);
-    if (!orderOpt.has_value()) {
+    if (!orderOpt) {
         return;
     }
 
-    auto order = orderOpt.value();
+    auto& order = *orderOpt;
     if (order.status == OrderStatus::CONFIRMED) {
         return;
     }
 
-    auto invOpt = invRepo_.FindBySampleId(job.sampleId);
-    if (invOpt.has_value()) {
-        auto inv = invOpt.value();
+    if (auto invOpt = invRepo_.FindBySampleId(job.sampleId)) {
+        auto inv = *invOpt;
         inv.currentStock += job.actualProductionQuantity;
         invRepo_.Save(inv);
     }
@@ -83,9 +82,23 @@ bool ProductionService::HasPendingJobs() const {
 }
 
 int ProductionService::CalcActualProductionQty(int requiredQty, double yieldRate) {
-    return static_cast<int>(std::ceil(requiredQty / (yieldRate * 0.9)));
+    if (requiredQty <= 0) {
+        throw std::invalid_argument("requiredQty must be greater than 0");
+    }
+    if (yieldRate <= 0.0) {
+        throw std::invalid_argument("yieldRate must be greater than 0");
+    }
+    return static_cast<int>(std::ceil(
+        static_cast<double>(requiredQty) / (yieldRate * YIELD_SAFETY_FACTOR)
+    ));
 }
 
 double ProductionService::CalcTotalProductionTime(double avgTime, int actualQty) {
-    return avgTime * actualQty;
+    if (avgTime < 0.0) {
+        throw std::invalid_argument("avgTime must be non-negative");
+    }
+    if (actualQty < 0) {
+        throw std::invalid_argument("actualQty must be non-negative");
+    }
+    return avgTime * static_cast<double>(actualQty);
 }
