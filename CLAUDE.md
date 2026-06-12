@@ -222,6 +222,34 @@ director
 | Dummy 데이터 생성 Tool | https://github.com/jiyun7-Lee/DummyDataGenerator-jiyun7Lee |
 | **메인 프로젝트** | `SampleOrderSystem-jiyun7Lee` |
 
+## 빌드 환경
+
+- **IDE**: Visual Studio 2022 (v145 toolset)
+- **빌드 시스템**: MSBuild (`.vcxproj` / `.slnx`) — CMake 미사용
+- **C++ 표준**: C++20 (`stdcpp20`)
+- **인코딩**: `/utf-8` 컴파일 옵션
+- **테스트 프레임워크**: Google Test + Google Mock (NuGet `gmock.1.11.0`)
+
+### 프로젝트 구성
+
+| 프로젝트 | 파일 | 역할 |
+|---------|------|------|
+| `Semicon` | `Semicon.vcxproj` | 메인 애플리케이션 |
+| `SemiconTest` | `SemiconTest.vcxproj` | 단위 테스트 (gmock) |
+
+### 빌드 명령 (MSBuild)
+
+```
+# 메인 앱 빌드
+msbuild Semicon\Semicon.vcxproj /p:Configuration=Debug /p:Platform=x64
+
+# 테스트 빌드 및 실행
+msbuild Semicon\SemiconTest.vcxproj /p:Configuration=Debug /p:Platform=x64
+x64\Debug\SemiconTest.exe
+```
+
+---
+
 ## 콘솔 한글 인코딩
 
 Windows 콘솔에서 한글이 깨지지 않도록 반드시 아래 설정을 적용한다.
