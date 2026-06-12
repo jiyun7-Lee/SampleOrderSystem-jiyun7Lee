@@ -90,3 +90,51 @@
 | 50 | ApproveOrder_NotReserved_ShouldThrow | OrderService::ApproveOrder | RESERVED 아닌 상태의 주문 | 예외 throw | Abnormal | ⬜ 미실행 | 2026-06-12 |
 | 51 | RejectOrder_ShouldBeRejected | OrderService::RejectOrder | RESERVED 주문 거절 | 주문 status == REJECTED | Normal | ⬜ 미실행 | 2026-06-12 |
 | 52 | RejectOrder_NotReserved_ShouldThrow | OrderService::RejectOrder | RESERVED 아닌 상태의 주문 거절 시도 | 예외 throw | Abnormal | ⬜ 미실행 | 2026-06-12 |
+
+---
+
+## Phase 4 — 생산 큐 및 생산 서비스
+
+**파일**: `tests/domain/ProductionQueueTest.cpp`  
+**Fixture**: `ProductionQueueFixture`
+
+| # | 테스트명 | 대상 클래스/함수 | 조건 | 기대 결과 | 구분 | 상태 | 추가일 |
+|---|---|---|---|---|---|---|---|
+| 53 | Enqueue_ShouldAddToQueue | ProductionQueue::Enqueue | Job 1건 추가 | 큐에 Job이 존재함 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 54 | Peek_ReturnsFirstJob | ProductionQueue::Peek | Job 추가 후 Peek | 첫 번째 Job 반환 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 55 | Dequeue_RemovesFirstJob | ProductionQueue::Dequeue | Job 1건 추가 후 Dequeue | 큐가 비어있음 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 56 | FIFO_Order_ShouldBePreserved | ProductionQueue | Job 복수 추가 | 추가 순서대로 반환됨 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 57 | IsEmpty_WhenNoJobs_ShouldBeTrue | ProductionQueue::IsEmpty | 빈 큐 상태 | IsEmpty() == true | Normal | ⬜ 미실행 | 2026-06-12 |
+| 58 | GetWaitingJobs_ShouldReturnAllJobsInFIFOOrder | ProductionQueue::GetWaitingJobs | Job 복수 추가 | FIFO 순서로 전체 Job 반환 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 59 | GetWaitingJobs_AfterDequeue_ShouldReflectRemainingJobs | ProductionQueue::GetWaitingJobs | Dequeue 후 조회 | 남은 Job만 반환 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 60 | Peek_WhenEmpty_ShouldReturnNullopt | ProductionQueue::Peek | 빈 큐에서 Peek | nullopt 반환 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 61 | Dequeue_WhenEmpty_ShouldNotThrow | ProductionQueue::Dequeue | 빈 큐에서 Dequeue | 예외 미발생 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 62 | GetWaitingJobs_WhenEmpty_ShouldReturnEmptyVector | ProductionQueue::GetWaitingJobs | 빈 큐 상태 | 빈 vector 반환 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 63 | Dequeue_AllJobs_ShouldBecomeEmpty | ProductionQueue::Dequeue | 전체 Job Dequeue | IsEmpty() == true | Abnormal | ⬜ 미실행 | 2026-06-12 |
+
+**파일**: `tests/service/ProductionServiceTest.cpp`  
+**Fixture**: `ProductionServiceFixture`, `ProductionCalcFixture`
+
+| # | 테스트명 | 대상 클래스/함수 | 조건 | 기대 결과 | 구분 | 상태 | 추가일 |
+|---|---|---|---|---|---|---|---|
+| 64 | CheckCompletion_BeforeFinishTime_ShouldNotComplete | ProductionService::CheckCompletion | 완료 시각 이전 | 주문 상태 변경 없음 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 65 | CheckCompletion_AfterFinishTime_ShouldComplete | ProductionService::CheckCompletion | 완료 시각 이후 | 생산 완료 처리됨 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 66 | OnComplete_ShouldUpdateOrderToConfirmed | ProductionService::OnComplete | 생산 완료 시 | 주문 status == CONFIRMED | Normal | ⬜ 미실행 | 2026-06-12 |
+| 67 | OnComplete_ShouldAddStockToInventory | ProductionService::OnComplete | 생산 완료 시 | 재고 증가 확인 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 68 | OnComplete_ShouldDequeueJob | ProductionService::OnComplete | 생산 완료 시 | 큐에서 해당 Job 제거됨 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 69 | MultipleJobs_ShouldProcessInFIFOOrder | ProductionService | Job 복수 등록 | 등록 순서대로 완료 처리됨 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 70 | GetCurrentJob_NoJobs_ShouldReturnNullopt | ProductionService::GetCurrentJob | 빈 큐 상태 | nullopt 반환 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 71 | GetCurrentJob_OneJob_ShouldReturnJob | ProductionService::GetCurrentJob | Job 1건 등록 | 해당 Job 반환 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 72 | GetWaitingJobs_NoJobs_ShouldReturnEmpty | ProductionService::GetWaitingJobs | 빈 큐 상태 | 빈 vector 반환 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 73 | GetWaitingJobs_TwoJobs_ShouldReturnSecondOnly | ProductionService::GetWaitingJobs | Job 2건 등록 | 두 번째 Job만 반환 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 74 | ActualQty_WithHighYield_ShouldBeSmaller | ProductionService::ActualQty | 높은 수율 | 낮은 수율 대비 실 생산량 적음 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 75 | ActualQty_WithLowYield_ShouldBeLarger | ProductionService::ActualQty | 낮은 수율 | 높은 수율 대비 실 생산량 많음 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 76 | ActualQty_Example_100_01_ShouldBe1112 | ProductionService::ActualQty | 부족분 100, 수율 0.1 | 실 생산량 == 1112 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 77 | TotalTime_3sec_100ea_ShouldBe300 | ProductionService::TotalTime | avgTime=3, qty=100 | 총 생산시간 == 300 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 78 | TotalTime_ZeroAvgTime_ShouldBeZero | ProductionService::TotalTime | avgTime=0 | 총 생산시간 == 0 | Normal | ⬜ 미실행 | 2026-06-12 |
+| 79 | CheckCompletion_EmptyQueue_ShouldDoNothing | ProductionService::CheckCompletion | 빈 큐 상태 | 아무 동작 없음, 예외 미발생 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 80 | CheckCompletion_ExactFinishTime_ShouldComplete | ProductionService::CheckCompletion | 현재 시각 == 완료 시각 | 생산 완료 처리됨 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 81 | CheckCompletion_OneSecondBeforeFinish_ShouldNotComplete | ProductionService::CheckCompletion | 완료 1초 전 | 완료 처리되지 않음 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 82 | CheckCompletion_AlreadyConfirmed_ShouldNotSaveAgain | ProductionService::CheckCompletion | 이미 CONFIRMED 상태 | Save 중복 호출 없음 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 83 | ActualQty_YieldOne_ShouldBeMinimum | ProductionService::ActualQty | 수율 == 1.0 | 실 생산량 최소값 | Abnormal | ⬜ 미실행 | 2026-06-12 |
+| 84 | ActualQty_VeryLowYield_ShouldBeVeryLarge | ProductionService::ActualQty | 매우 낮은 수율 | 실 생산량 매우 큼 | Abnormal | ⬜ 미실행 | 2026-06-12 |
