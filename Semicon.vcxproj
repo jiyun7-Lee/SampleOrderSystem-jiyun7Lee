@@ -195,6 +195,8 @@
     <ClCompile Include="tests\repository\InMemoryRepositoryExtTest.cpp" />
     <ClCompile Include="tests\domain\ProductionQueueTest.cpp" />
     <ClCompile Include="tests\service\ProductionServiceTest.cpp" />
+    <ClCompile Include="tests\service\ReleaseServiceTest.cpp" />
+    <ClCompile Include="tests\service\MonitoringServiceTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
