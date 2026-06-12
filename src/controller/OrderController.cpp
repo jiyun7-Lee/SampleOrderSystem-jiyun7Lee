@@ -29,11 +29,14 @@ void OrderController::ProcessApproval() {
 
     _view->ShowOrderList(reserved);
 
-    std::string orderId = _view->InputString("\n처리할 주문번호 (취소: 0): ");
-    if (orderId == "0" || orderId.empty()) {
+    int no = _view->InputInt("\n처리할 번호 (취소: 0): ");
+    if (no == 0) return;
+    if (no < 1 || no > static_cast<int>(reserved.size())) {
+        _view->ShowMessage("올바른 번호를 입력하세요.");
         return;
     }
 
+    const std::string& orderId = reserved[no - 1].orderId;
     int choice = _view->InputInt("[1] 승인  [2] 거절  선택: ");
 
     try {

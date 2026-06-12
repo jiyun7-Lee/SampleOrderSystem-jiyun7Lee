@@ -5,14 +5,15 @@
 #include <limits>
 
 // 컬럼 표시 너비 (display columns)
+static constexpr int kColNo          =  4;
 static constexpr int kColOrderId     = 20;
 static constexpr int kColSampleId    =  8;
 static constexpr int kColCustomer    = 16;
 static constexpr int kColQty         =  6;
 static constexpr int kColStatus      = 10;
 static constexpr int kSeparatorLen   =
-    kColOrderId + kColSampleId + kColCustomer + kColQty + kColStatus + 12;
-//  12 = " | " x 4
+    kColNo + kColOrderId + kColSampleId + kColCustomer + kColQty + kColStatus + 15;
+//  15 = " | " x 5
 
 void OrderView::ShowOrderMenu() const {
     std::cout << "\n[시료 주문]\n"
@@ -31,17 +32,21 @@ void OrderView::ShowOrderList(const std::vector<Order>& orders) const {
         return;
     }
     std::cout << "\n"
-              << PadRight("주문번호",   kColOrderId)  << " | "
-              << PadRight("시료ID",     kColSampleId) << " | "
-              << PadRight("고객명",     kColCustomer) << " | "
-              << PadLeft ("수량",       kColQty)      << " | "
-              << PadRight("상태",       kColStatus)
+              << PadLeft ("번호",     kColNo)       << " | "
+              << PadRight("주문번호", kColOrderId)  << " | "
+              << PadRight("시료ID",   kColSampleId) << " | "
+              << PadRight("고객명",   kColCustomer) << " | "
+              << PadLeft ("수량",     kColQty)      << " | "
+              << PadRight("상태",     kColStatus)
               << "\n" << std::string(kSeparatorLen, '-') << "\n";
 
+    int no = 1;
     for (const auto& o : orders) {
-        std::ostringstream qty;
-        qty << o.quantity;
-        std::cout << PadRight(o.orderId,                kColOrderId)  << " | "
+        std::ostringstream noStr, qty;
+        noStr << no++;
+        qty   << o.quantity;
+        std::cout << PadLeft (noStr.str(),              kColNo)       << " | "
+                  << PadRight(o.orderId,                kColOrderId)  << " | "
                   << PadRight(o.sampleId,               kColSampleId) << " | "
                   << PadRight(o.customerName,           kColCustomer) << " | "
                   << PadLeft (qty.str(),                kColQty)      << " | "
