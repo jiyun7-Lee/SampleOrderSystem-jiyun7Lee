@@ -7,9 +7,9 @@ ProductionController::ProductionController(
 
 void ProductionController::ShowProductionLine() {
     _service->CheckAndCompleteProduction();
-    auto currentJob  = _service->GetCurrentJob();
-    auto waitingJobs = _service->GetWaitingJobs();
-    _view->ShowProductionLine(currentJob, waitingJobs);
+    auto currentProgress = _service->GetCurrentJobProgress();
+    auto waitingJobs     = _service->GetWaitingJobs();
+    _view->ShowProductionLine(currentProgress, waitingJobs);
 }
 
 void ProductionController::CheckProduction() {
