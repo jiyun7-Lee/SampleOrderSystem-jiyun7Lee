@@ -15,12 +15,12 @@
 | F-11 | OrderController | 주문 접수 UI 흐름(PlaceOrder), 승인/거절 UI 흐름(ProcessApproval) | ✅ 2026-06-12 | ⬜ | ⬜ | Phase 3 구현 완료 |
 | F-12 | OrderView | 주문 입력 폼, 주문 목록 표시, 승인/거절 선택 UI | ✅ 2026-06-12 | ⬜ | ⬜ | Phase 3 구현 완료 |
 | F-13 | 메인 메뉴 [2][3] 연결 | main.cpp 메인 메뉴에서 [2] 시료 주문 및 [3] 주문 승인/거절 선택 시 OrderController 호출 | ✅ 2026-06-12 | ⬜ | ⬜ | Phase 3 구현 완료 |
-| F-14 | ProductionService | 생산라인 FIFO 스케줄링, 실 생산량 계산(ceil(부족분/(수율*0.9))), 생산완료 시 PRODUCING→CONFIRMED 전환 | ⬜ | ⬜ | ⬜ | Phase 4 예정 |
-| F-15 | ProductionController / ProductionView | 생산라인 조회 UI | ⬜ | ⬜ | ⬜ | Phase 4 예정 |
-| F-16 | 메인 메뉴 [5] 생산라인 조회 연결 | main.cpp 메인 메뉴에서 [5] 생산라인 조회 선택 시 ProductionController 호출 | ⬜ | ⬜ | ⬜ | Phase 4 예정 |
-| F-17 | MonitoringService | 상태별 주문 수 집계(RESERVED/CONFIRMED/PRODUCING/RELEASE), 시료별 재고 현황(여유/부족/고갈) | ⬜ | ⬜ | ⬜ | Phase 5 예정 |
-| F-18 | ReleaseService | CONFIRMED 주문 출고 처리(CONFIRMED→RELEASE), 재고 차감 | ⬜ | ⬜ | ⬜ | Phase 5 예정 |
-| F-19 | MonitoringController / MonitoringView | 모니터링 UI | ⬜ | ⬜ | ⬜ | Phase 5 예정 |
-| F-20 | ReleaseController / ReleaseView | 출고 처리 UI | ⬜ | ⬜ | ⬜ | Phase 5 예정 |
-| F-21 | 메인 메뉴 [4][6] 연결 | main.cpp 메인 메뉴에서 [4] 모니터링, [6] 출고 처리 연결 | ⬜ | ⬜ | ⬜ | Phase 5 예정 |
-| F-22 | 데이터 영속성 (JSON) | nlohmann/json 기반 파일 저장/로드 Repository 구현체 (Sample/Order/Inventory/ProductionJob) | ⬜ | ⬜ | ⬜ | Phase 6 예정 |
+| F-14 | ProductionService | 생산라인 FIFO 스케줄링, 실 생산량 계산(ceil(부족분/(수율*0.9))), 생산완료 시 PRODUCING→CONFIRMED 전환 | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 4 완료 |
+| F-15 | ProductionController / ProductionView | 생산라인 조회 UI | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 4 완료 |
+| F-16 | 메인 메뉴 [5] 생산라인 조회 연결 | main.cpp 메인 메뉴에서 [5] 생산라인 조회 선택 시 ProductionController 호출 | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 4 완료 |
+| F-17 | MonitoringService | 상태별 주문 수 집계(RESERVED/CONFIRMED/PRODUCING/RELEASE), 시료별 재고 현황(여유/부족/고갈) | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 5 완료 |
+| F-18 | ReleaseService | CONFIRMED 주문 출고 처리(CONFIRMED→RELEASE), 재고 차감 | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 5 완료 |
+| F-19 | MonitoringController / MonitoringView | 모니터링 UI | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 5 완료 |
+| F-20 | ReleaseController / ReleaseView | 출고 처리 UI | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 5 완료 |
+| F-21 | 메인 메뉴 [4][6] 연결 | main.cpp 메인 메뉴에서 [4] 모니터링, [6] 출고 처리 연결 | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 5 완료 |
+| F-22 | 데이터 영속성 (JSON) | nlohmann/json 기반 파일 저장/로드 Repository 구현체 (Sample/Order/Inventory/ProductionJob) | ✅ 2026-06-12 | ✅ 2026-06-12 | ✅ 2026-06-12 | Phase 6 완료 |

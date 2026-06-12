@@ -41,43 +41,43 @@
 - [x] Step 2-3: SampleView 구현 (콘솔 UI)
 - [x] Step 2-4: 메인 메뉴 [1] 시료 관리 연결
 
-### Phase 3 — 주문 관리 기능 (FR-04~06) → [상세](Phase3_주문관리.md)
-- [ ] Step 3-1: InventoryService 구현 (availableStock 계산)
-- [ ] Step 3-2: OrderService 구현 (주문 접수·승인·거절)
-- [ ] Step 3-3: OrderController 구현
-- [ ] Step 3-4: OrderView 구현 (주문 접수 UI, 승인/거절 UI)
-- [ ] Step 3-5: 메인 메뉴 [2] 시료 주문, [3] 주문 승인/거절 연결
+### Phase 3 — 주문 관리 기능 (FR-04~06) ✅ → [상세](Phase3_주문관리.md)
+- [x] Step 3-1: InventoryService 구현 (availableStock 계산)
+- [x] Step 3-2: OrderService 구현 (주문 접수·승인·거절)
+- [x] Step 3-3: OrderController 구현
+- [x] Step 3-4: OrderView 구현 (주문 접수 UI, 승인/거절 UI)
+- [x] Step 3-5: 메인 메뉴 [2] 시료 주문, [3] 주문 승인/거절 연결
 
-### Phase 4 — 생산라인 관리 (FR-07~08) → [상세](Phase4_생산라인관리.md)
-- [ ] Step 4-1: ProductionQueue 구현 (FIFO, `std::queue<ProductionJob>`)
-- [ ] Step 4-2: ProductionService 구현 (실시간 생산 처리, 생산완료 감지)
-- [ ] Step 4-3: 생산량·생산시간 계산 (`ceil(requiredQty / (yieldRate * 0.9))`)
-- [ ] Step 4-4: 초과 생산분 즉시 availableStock 반영 로직
-- [ ] Step 4-5: ProductionController 및 ProductionView 구현
-- [ ] Step 4-6: 메인 메뉴 [5] 생산라인 조회 연결
+### Phase 4 — 생산라인 관리 (FR-07~08) ✅ → [상세](Phase4_생산라인관리.md)
+- [x] Step 4-1: ProductionQueue 구현 (FIFO, `std::queue<ProductionJob>`)
+- [x] Step 4-2: ProductionService 구현 (실시간 생산 처리, 생산완료 감지)
+- [x] Step 4-3: 생산량·생산시간 계산 (`ceil(requiredQty / (yieldRate * 0.9))`)
+- [x] Step 4-4: 초과 생산분 즉시 availableStock 반영 로직
+- [x] Step 4-5: ProductionController 및 ProductionView 구현
+- [x] Step 4-6: 메인 메뉴 [5] 생산라인 조회 연결
 
-### Phase 5 — 모니터링 및 출고 처리 (FR-09~11) → [상세](Phase5_모니터링_출고처리.md)
-- [ ] Step 5-1: ReleaseService 구현 (CONFIRMED → RELEASE, 재고 차감)
-- [ ] Step 5-2: MonitoringService 구현 (주문량·재고량·상태 조회)
-- [ ] Step 5-3: ReleaseController / MonitoringController 구현
-- [ ] Step 5-4: ReleaseView / MonitoringView 구현
-- [ ] Step 5-5: 메인 메뉴 [4] 모니터링, [6] 출고 처리 연결
+### Phase 5 — 모니터링 및 출고 처리 (FR-09~11) ✅ → [상세](Phase5_모니터링_출고처리.md)
+- [x] Step 5-1: ReleaseService 구현 (CONFIRMED → RELEASE, 재고 차감)
+- [x] Step 5-2: MonitoringService 구현 (주문량·재고량·상태 조회)
+- [x] Step 5-3: ReleaseController / MonitoringController 구현
+- [x] Step 5-4: ReleaseView / MonitoringView 구현
+- [x] Step 5-5: 메인 메뉴 [4] 모니터링, [6] 출고 처리 연결
 
-### Phase 6 — 데이터 영속성 (JSON 파일 기반) → [상세](Phase6_데이터영속성.md)
-- [ ] Step 6-1: JSON 라이브러리 연동 (nlohmann/json)
-- [ ] Step 6-2: SampleJsonRepository 구현
-- [ ] Step 6-3: OrderJsonRepository 구현
-- [ ] Step 6-4: InventoryJsonRepository 구현
-- [ ] Step 6-5: ProductionJobJsonRepository 구현
-- [ ] Step 6-6: 애플리케이션 시작 시 데이터 로드 / 변경 시 자동 저장
+### Phase 6 — 데이터 영속성 (JSON 파일 기반) ✅ → [상세](Phase6_데이터영속성.md)
+- [x] Step 6-1: JSON 라이브러리 연동 (nlohmann/json)
+- [x] Step 6-2: SampleJsonRepository 구현
+- [x] Step 6-3: OrderJsonRepository 구현
+- [x] Step 6-4: InventoryJsonRepository 구현
+- [x] Step 6-5: ProductionJobJsonRepository 구현
+- [x] Step 6-6: 애플리케이션 시작 시 데이터 로드 / 변경 시 자동 저장
 
-### Phase 7 — 단위 테스트 및 커버리지 달성 → [상세](Phase7_단위테스트_커버리지.md)
-- [ ] Step 7-1: Domain 단위 테스트 (Sample, Order, Inventory, ProductionJob)
-- [ ] Step 7-2: SampleService 단위 테스트 (gmock — ISampleRepository 주입)
-- [ ] Step 7-3: OrderService 단위 테스트 (gmock — IOrderRepository, IInventoryRepository, ITimeProvider 주입)
-- [ ] Step 7-4: ProductionService 단위 테스트 (gmock — ITimeProvider로 시간 시뮬레이션)
-- [ ] Step 7-5: MonitoringService / ReleaseService 단위 테스트
-- [ ] Step 7-6: 커버리지 측정 (OpenCppCoverage) — 목표 80% 이상
+### Phase 7 — 단위 테스트 및 커버리지 달성 ✅ → [상세](Phase7_단위테스트_커버리지.md)
+- [x] Step 7-1: Domain 단위 테스트 (Sample, Order, Inventory, ProductionJob)
+- [x] Step 7-2: SampleService 단위 테스트 (gmock — ISampleRepository 주입)
+- [x] Step 7-3: OrderService 단위 테스트 (gmock — IOrderRepository, IInventoryRepository, ITimeProvider 주입)
+- [x] Step 7-4: ProductionService 단위 테스트 (gmock — ITimeProvider로 시간 시뮬레이션)
+- [x] Step 7-5: MonitoringService / ReleaseService 단위 테스트
+- [x] Step 7-6: 커버리지 측정 (OpenCppCoverage) — 목표 80% 이상
 
 ---
 
