@@ -24,8 +24,6 @@ void ReleaseController::HandleRelease() {
 
     try {
         _service->ReleaseOrder(orderId);
-        auto released = _service->GetConfirmedOrders();
-        // 출고된 주문을 직접 조회할 수 없으므로 변경 전 정보를 복사해서 상태만 교체
         Order result = confirmed[choice - 1];
         result.status = OrderStatus::RELEASE;
         _view->ShowReleaseResult(result);

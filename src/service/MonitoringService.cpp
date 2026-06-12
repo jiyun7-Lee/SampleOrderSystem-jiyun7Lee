@@ -20,26 +20,21 @@ OrderStatusSummary MonitoringService::GetOrderSummary() const {
 
 std::vector<InventoryStatus> MonitoringService::GetInventoryStatus() const {
     std::vector<InventoryStatus> result;
-    const auto samples = sampleRepo_.FindAll();
 
-    for (const auto& sample : samples) {
-        InventoryStatus entry;
-        entry.sampleId   = sample.sampleId;
-        entry.sampleName = sample.name;
-
+    for (const auto& sample : sampleRepo_.FindAll()) {
         const auto inv = inventoryRepo_.FindBySampleId(sample.sampleId);
-        if (!inv.has_value() || inv->currentStock == 0) {
-            entry.currentStock = inv.has_value() ? inv->currentStock : 0;
-            entry.status       = StockStatus::DEPLETED;
+        const int stock = inv ? inv->currentStock : 0;
+
+        StockStatus stockStatus;
+        if (stock == 0) {
+            stockStatus = StockStatus::DEPLETED;
         } else if (inv->availableStock() <= 0) {
-            entry.currentStock = inv->currentStock;
-            entry.status       = StockStatus::SHORTAGE;
+            stockStatus = StockStatus::SHORTAGE;
         } else {
-            entry.currentStock = inv->currentStock;
-            entry.status       = StockStatus::SUFFICIENT;
+            stockStatus = StockStatus::SUFFICIENT;
         }
 
-        result.push_back(entry);
+        result.push_back({ sample.sampleId, sample.name, stock, stockStatus });
     }
 
     return result;

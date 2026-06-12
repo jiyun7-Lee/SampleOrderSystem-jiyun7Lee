@@ -2,10 +2,15 @@
 #include <iostream>
 #include <limits>
 
+namespace {
+    constexpr const char* kReleaseSeparator =
+        "---------------------------------------------------------------\n";
+}
+
 void ReleaseView::ShowConfirmedOrders(const std::vector<Order>& orders) const {
     std::cout << "\n[출고 처리] CONFIRMED 주문 목록\n"
               << "번호 | 주문번호             | 시료ID  | 고객명         | 수량\n"
-              << "---------------------------------------------------------------\n";
+              << kReleaseSeparator;
     int idx = 1;
     for (const auto& o : orders) {
         std::cout << idx++
@@ -34,6 +39,7 @@ int ReleaseView::InputInt(const std::string& prompt) const {
     std::cin >> value;
     if (std::cin.fail()) {
         std::cin.clear();
+        value = -1;
     }
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return value;

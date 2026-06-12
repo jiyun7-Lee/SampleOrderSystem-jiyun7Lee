@@ -2,6 +2,11 @@
 #include <iostream>
 #include <limits>
 
+namespace {
+    constexpr const char* kInventorySeparator =
+        "-------------------------------------------\n";
+}
+
 void MonitoringView::ShowMenu() const {
     std::cout << "\n[모니터링]\n"
               << "  [1] 주문량 확인\n"
@@ -24,7 +29,7 @@ void MonitoringView::ShowInventoryStatus(const std::vector<InventoryStatus>& sta
     }
     std::cout << "\n[재고 현황]\n"
               << "시료ID  | 시료명         | 현재 재고 | 상태\n"
-              << "-------------------------------------------\n";
+              << kInventorySeparator;
     for (const auto& s : statuses) {
         std::cout << s.sampleId
                   << " | " << s.sampleName
@@ -44,6 +49,7 @@ int MonitoringView::InputInt(const std::string& prompt) const {
     std::cin >> value;
     if (std::cin.fail()) {
         std::cin.clear();
+        value = -1;
     }
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return value;

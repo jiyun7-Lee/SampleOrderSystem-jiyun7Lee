@@ -9,19 +9,23 @@ std::vector<Order> ReleaseService::GetConfirmedOrders() const {
 }
 
 void ReleaseService::ReleaseOrder(const std::string& orderId) {
-    auto optOrder = orderRepo_.FindById(orderId);
-    if (!optOrder.has_value()) {
+    if (orderId.empty()) {
+        throw std::invalid_argument("orderId must not be empty");
+    }
+
+    const auto optOrder = orderRepo_.FindById(orderId);
+    if (!optOrder) {
         throw std::runtime_error("Order not found: " + orderId);
     }
 
-    Order order = *optOrder;
-    if (order.status != OrderStatus::CONFIRMED) {
+    if (optOrder->status != OrderStatus::CONFIRMED) {
         throw std::logic_error("Order is not in CONFIRMED status: " + orderId);
     }
 
-    inventoryService_.DeductStock(order.sampleId, order.quantity);
-    inventoryService_.DeallocateStock(order.sampleId, order.quantity);
+    inventoryService_.DeductStock(optOrder->sampleId, optOrder->quantity);
+    inventoryService_.DeallocateStock(optOrder->sampleId, optOrder->quantity);
 
-    order.status = OrderStatus::RELEASE;
-    orderRepo_.Save(order);
+    Order updated = *optOrder;
+    updated.status = OrderStatus::RELEASE;
+    orderRepo_.Save(updated);
 }
