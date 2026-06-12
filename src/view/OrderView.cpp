@@ -1,6 +1,18 @@
 #include "OrderView.h"
+#include "ViewUtil.h"
 #include <iostream>
+#include <sstream>
 #include <limits>
+
+// 컬럼 표시 너비 (display columns)
+static constexpr int kColOrderId     = 20;
+static constexpr int kColSampleId    =  8;
+static constexpr int kColCustomer    = 16;
+static constexpr int kColQty         =  6;
+static constexpr int kColStatus      = 10;
+static constexpr int kSeparatorLen   =
+    kColOrderId + kColSampleId + kColCustomer + kColQty + kColStatus + 12;
+//  12 = " | " x 4
 
 void OrderView::ShowOrderMenu() const {
     std::cout << "\n[시료 주문]\n"
@@ -13,18 +25,27 @@ void OrderView::ShowApprovalMenu() const {
 }
 
 void OrderView::ShowOrderList(const std::vector<Order>& orders) const {
+    using namespace ViewUtil;
     if (orders.empty()) {
         std::cout << "조회할 주문이 없습니다.\n";
         return;
     }
-    std::cout << "주문번호             | 시료ID  | 고객명         | 수량 | 상태\n"
-              << "--------------------------------------------------------------\n";
+    std::cout << "\n"
+              << PadRight("주문번호",   kColOrderId)  << " | "
+              << PadRight("시료ID",     kColSampleId) << " | "
+              << PadRight("고객명",     kColCustomer) << " | "
+              << PadLeft ("수량",       kColQty)      << " | "
+              << PadRight("상태",       kColStatus)
+              << "\n" << std::string(kSeparatorLen, '-') << "\n";
+
     for (const auto& o : orders) {
-        std::cout << o.orderId
-                  << " | " << o.sampleId
-                  << " | " << o.customerName
-                  << " | " << o.quantity
-                  << " | " << StatusToString(o.status)
+        std::ostringstream qty;
+        qty << o.quantity;
+        std::cout << PadRight(o.orderId,                kColOrderId)  << " | "
+                  << PadRight(o.sampleId,               kColSampleId) << " | "
+                  << PadRight(o.customerName,           kColCustomer) << " | "
+                  << PadLeft (qty.str(),                kColQty)      << " | "
+                  << PadRight(StatusToString(o.status), kColStatus)
                   << "\n";
     }
 }

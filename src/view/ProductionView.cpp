@@ -1,9 +1,19 @@
 #include "ProductionView.h"
+#include "ViewUtil.h"
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <ctime>
 
-// static: time_point -> "YYYY-MM-DD HH:MM:SS" 문자열 변환
+// 컬럼 표시 너비 (display columns)
+static constexpr int kColNo       =  3;
+static constexpr int kColOrderId  = 20;
+static constexpr int kColSampleId =  8;
+static constexpr int kColQty      =  6;
+static constexpr int kSeparatorLen =
+    kColNo + kColOrderId + kColSampleId + kColQty + 9;
+//  9 = " | " x 3
+
 std::string ProductionView::FormatTimePoint(
     const std::chrono::system_clock::time_point& tp)
 {
@@ -19,27 +29,33 @@ std::string ProductionView::FormatTimePoint(
     return std::string(buf);
 }
 
-// 현재 생산 중인 작업 한 줄 출력
 void ProductionView::PrintCurrentJob(const ProductionJob& job) const {
-    std::cout << "[현재 생산 중]\n"
-              << "주문번호: " << job.orderId
-              << " | 시료ID: " << job.sampleId
-              << " | 수량: " << job.requiredQuantity
-              << " | 완료 예정: " << FormatTimePoint(job.expectedFinishTime)
-              << "\n";
+    using namespace ViewUtil;
+    std::cout << "\n[현재 생산 중]\n"
+              << "  " << PadRight("주문번호",   14) << ": " << job.orderId          << "\n"
+              << "  " << PadRight("시료ID",     14) << ": " << job.sampleId         << "\n"
+              << "  " << PadRight("필요 수량",  14) << ": " << job.requiredQuantity  << "\n"
+              << "  " << PadRight("완료 예정",  14) << ": " << FormatTimePoint(job.expectedFinishTime) << "\n";
 }
 
-// 대기 큐 테이블 출력 (FIFO 순서)
 void ProductionView::PrintWaitingJobs(const std::vector<ProductionJob>& jobs) const {
+    using namespace ViewUtil;
     std::cout << "\n[대기 중인 작업 목록 (FIFO 순서)]\n"
-              << "No | 주문번호             | 시료ID  | 수량\n"
-              << "-------------------------------------------\n";
+              << PadLeft ("No",     kColNo)       << " | "
+              << PadRight("주문번호", kColOrderId) << " | "
+              << PadRight("시료ID",  kColSampleId) << " | "
+              << PadLeft ("수량",    kColQty)
+              << "\n" << std::string(kSeparatorLen, '-') << "\n";
+
     int no = 1;
     for (const auto& job : jobs) {
-        std::cout << std::setw(2) << no++
-                  << " | " << job.orderId
-                  << " | " << job.sampleId
-                  << " | " << job.requiredQuantity
+        std::ostringstream noStr, qty;
+        noStr << no++;
+        qty   << job.requiredQuantity;
+        std::cout << PadLeft (noStr.str(),   kColNo)       << " | "
+                  << PadRight(job.orderId,   kColOrderId)  << " | "
+                  << PadRight(job.sampleId,  kColSampleId) << " | "
+                  << PadLeft (qty.str(),     kColQty)
                   << "\n";
     }
 }

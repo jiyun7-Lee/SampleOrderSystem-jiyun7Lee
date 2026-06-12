@@ -1,40 +1,58 @@
 #include "MonitoringView.h"
+#include "ViewUtil.h"
 #include <iostream>
+#include <sstream>
 #include <limits>
 
-namespace {
-    constexpr const char* kInventorySeparator =
-        "-------------------------------------------\n";
-}
+// 컬럼 표시 너비 (display columns)
+static constexpr int kColSampleId   =  8;
+static constexpr int kColName       = 20;
+static constexpr int kColStock      = 10;
+static constexpr int kColStockStat  =  8;
+static constexpr int kSeparatorLen  =
+    kColSampleId + kColName + kColStock + kColStockStat + 9;
+//  9 = " | " x 3
+
+// 주문량 현황 라벨 너비 (표시 너비 기준)
+static constexpr int kLabelWidth = 24;
 
 void MonitoringView::ShowMenu() const {
     std::cout << "\n[모니터링]\n"
               << "  [1] 주문량 확인\n"
               << "  [2] 재고량 확인\n"
-              << "  [0] 뒤로\n";
+              << "  [0] 뒤로\n"
+              << "선택: ";
 }
 
 void MonitoringView::ShowOrderSummary(const OrderStatusSummary& summary) const {
+    using namespace ViewUtil;
     std::cout << "\n[주문량 현황]\n"
-              << "  접수(RESERVED) : " << summary.reservedCount  << "건\n"
-              << "  생산 중(PRODUCING): " << summary.producingCount << "건\n"
-              << "  출고 대기(CONFIRMED): " << summary.confirmedCount << "건\n"
-              << "  출고 완료(RELEASE): " << summary.releaseCount   << "건\n";
+              << "  " << PadRight("접수(RESERVED)",      kLabelWidth) << ": " << summary.reservedCount  << "건\n"
+              << "  " << PadRight("생산 중(PRODUCING)",  kLabelWidth) << ": " << summary.producingCount << "건\n"
+              << "  " << PadRight("출고 대기(CONFIRMED)", kLabelWidth) << ": " << summary.confirmedCount << "건\n"
+              << "  " << PadRight("출고 완료(RELEASE)",  kLabelWidth) << ": " << summary.releaseCount   << "건\n";
 }
 
 void MonitoringView::ShowInventoryStatus(const std::vector<InventoryStatus>& statuses) const {
+    using namespace ViewUtil;
     if (statuses.empty()) {
         std::cout << "등록된 시료가 없습니다.\n";
         return;
     }
     std::cout << "\n[재고 현황]\n"
-              << "시료ID  | 시료명         | 현재 재고 | 상태\n"
-              << kInventorySeparator;
+              << PadRight("시료ID",   kColSampleId) << " | "
+              << PadRight("시료명",   kColName)     << " | "
+              << PadLeft ("현재 재고", kColStock)   << " | "
+              << PadRight("상태",     kColStockStat)
+              << "\n" << std::string(kSeparatorLen, '-') << "\n";
+
     for (const auto& s : statuses) {
-        std::cout << s.sampleId
-                  << " | " << s.sampleName
-                  << " | " << s.currentStock
-                  << " | " << StockStatusToString(s.status)
+        std::ostringstream stock;
+        stock << s.currentStock;
+        std::cout << PadRight(s.sampleId,                     kColSampleId) << " | "
+                  << PadRight(s.sampleName,                   kColName)     << " | "
+                  << PadLeft (stock.str(),                    kColStock)    << " | "
+                  << PadRight(StockStatusToString(s.status),  kColStockStat)
                   << "\n";
     }
 }
